@@ -14,6 +14,7 @@ public class OpenMrsTest {
         HomePage homePage = new HomePage(driver);
         RegistrationPage registrationPage = new RegistrationPage(driver);
         PatientDetailsPage patientDetailsPage = new PatientDetailsPage(driver);
+        FindPatientPage findPatientPage = new FindPatientPage(driver);
 
         basePage.navigateToUrl("https://o2.openmrs.org/openmrs/login.htm");
         if (loginPage.getPageTitle().equals("Login")) {
@@ -27,6 +28,27 @@ public class OpenMrsTest {
                             registrationPage.clickConfirmButon();
                             if (patientDetailsPage.verifyPatientName("Test, User1")) {
                                 System.out.println(patientDetailsPage.getPatientId());
+                                homePage.clickHomeButton();
+                                if (homePage.verifyModuleTile("Find Patient Record")) {
+                                    homePage.clickModuleTile("Find Patient Record");
+                                    if (homePage.verifyModulePage("Find Patient Record")) {
+                                        findPatientPage.searchPatientWithName("Test User1");
+                                        if (findPatientPage.verifySearchPatientTableColumnValue("Name", "Test User1")) {
+                                            findPatientPage.clickSearchPatientTableFirstRecord();
+                                            if (patientDetailsPage.verifyPatientName("Test User1")) {
+                                                System.out.println("Find Patient Name is matching in Patient Details Page");
+                                            } else {
+                                                System.out.println("Find Patient Name is not matching in Patient Details Page");
+                                            }
+                                        } else {
+                                            System.out.println("Find Patient record is not matching");
+                                        }
+                                    } else {
+                                        System.out.println("Find Patient Record Page is not displayed");
+                                    }
+                                } else {
+                                    System.out.println("Find Patient Record Module is not displayed");
+                                }
                             } else {
                                 System.out.println("Patient Name is incorrect in Patient Details Page");
                             }

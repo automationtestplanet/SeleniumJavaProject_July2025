@@ -29,7 +29,12 @@ public class PatientDetailsPage extends BasePage {
     }
 
     public boolean verifyPatientName(String patientName) {
-        String[] patientNameArr = patientName.split(",");
+        String[] patientNameArr;
+        if(patientName.contains(",")){
+            patientNameArr = patientName.split(",");
+        }else{
+            patientNameArr = patientName.split(" ");
+        }
         return getGivenName().equals(patientNameArr[0].trim()) && getFamilyName().equals(patientNameArr[1].trim());
     }
 

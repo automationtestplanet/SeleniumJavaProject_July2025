@@ -10,6 +10,9 @@ public class HomePage extends BasePage {
     @FindBy(partialLinkText = "Logout")
     WebElement logoutElement;
 
+    @FindBy(css = "i[class='icon-home small']")
+    WebElement homeIcon;
+
     public HomePage(WebDriver driver) {
         super(driver);
     }
@@ -28,5 +31,9 @@ public class HomePage extends BasePage {
 
     public void logoutApplication() {
         logoutElement.click();
+    }
+
+    public void clickHomeButton(){
+        homeIcon.click();
     }
 }
