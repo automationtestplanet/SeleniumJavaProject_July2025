@@ -14,6 +14,21 @@ public class PatientDetailsPage extends BasePage {
     @FindBy(xpath = "//em[contains(text(),'Patient ID')]//following-sibling::span")
     private WebElement patientIdLabel;
 
+    @FindBy(xpath = "//div[contains(text(),'Start Visit')]//ancestor::a")
+    private WebElement startVisitsLink;
+
+    @FindBy(id = "start-visit-with-visittype-confirm")
+    private WebElement startVisitsConfirmButton;
+
+    @FindBy(xpath = "//div[contains(text(),'Delete Patient')]//ancestor::a")
+    private WebElement deletePatientLink;
+
+    @FindBy(id = "delete-reason")
+    private WebElement deleteReasonInput;
+
+    @FindBy(css = "div[id='delete-patient-creation-dialog'] button[class='confirm right']")
+    private WebElement deleteConfirmButton;
+
     public PatientDetailsPage(WebDriver driver) {
         super(driver);
     }
@@ -30,9 +45,9 @@ public class PatientDetailsPage extends BasePage {
 
     public boolean verifyPatientName(String patientName) {
         String[] patientNameArr;
-        if(patientName.contains(",")){
+        if (patientName.contains(",")) {
             patientNameArr = patientName.split(",");
-        }else{
+        } else {
             patientNameArr = patientName.split(" ");
         }
         return getGivenName().equals(patientNameArr[0].trim()) && getFamilyName().equals(patientNameArr[1].trim());
@@ -41,4 +56,36 @@ public class PatientDetailsPage extends BasePage {
     public String getPatientId() {
         return patientIdLabel.getText().trim();
     }
+
+    public void clickStartVisits() {
+        startVisitsLink.click();
+    }
+
+    public void clickStartVisitsConfirmButton() {
+        startVisitsConfirmButton.click();
+    }
+
+    public void startVisits(){
+        clickStartVisits();
+        clickStartVisitsConfirmButton();
+    }
+
+    public void clickDeletePatientLink(){
+        deletePatientLink.click();
+    }
+
+    public void setDeleteReason(String reason){
+        deleteReasonInput.sendKeys(reason);
+    }
+
+    public void clickDeleteConfirmButton(){
+        deleteConfirmButton.click();
+    }
+
+    public void deletePatient(String reason){
+        clickDeletePatientLink();
+        setDeleteReason(reason);
+        clickDeleteConfirmButton();
+    }
+
 }

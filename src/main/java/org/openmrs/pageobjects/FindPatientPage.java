@@ -12,12 +12,15 @@ import java.util.Map;
 public class FindPatientPage extends BasePage {
 
     @FindBy(id = "patient-search")
-    WebElement patientSearchInput;
+    private WebElement patientSearchInput;
     @FindBy(xpath = "//table[@id='patient-search-results-table']/thead/tr/th/div")
-    List<WebElement> searchPatientTableColumns;
+    private List<WebElement> searchPatientTableColumns;
 
     @FindBy(xpath = "//table[@id='patient-search-results-table']/tbody/tr[1]/td[1]")
-    WebElement searchPatientTableFirstRecord;
+    private WebElement searchPatientTableFirstRecord;
+
+    @FindBy(xpath = "//td[text()='No matching records found']")
+    private WebElement noMatchingRecordsFoundElement;
 
     public FindPatientPage(WebDriver driver) {
         super(driver);
@@ -46,10 +49,20 @@ public class FindPatientPage extends BasePage {
     }
 
     public boolean verifySearchPatientTableColumnValue(String columnName, String expectedValue) {
-        return getSearchPatientTableColumnValue(columnName).equals(expectedValue);
+        try {
+            Thread.sleep(3000);
+            return getSearchPatientTableColumnValue(columnName).equals(expectedValue);
+        } catch (Exception e) {
+            System.out.println("Exception occurred while verifying the patient filtered record: " + e.getMessage());
+            return false;
+        }
     }
 
-    public void clickSearchPatientTableFirstRecord(){
+    public void clickSearchPatientTableFirstRecord() {
         searchPatientTableFirstRecord.click();
+    }
+
+    public boolean verifyNoMatchingRecordsFoundMessage(){
+        return noMatchingRecordsFoundElement.isDisplayed();
     }
 }

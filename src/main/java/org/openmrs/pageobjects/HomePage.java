@@ -30,10 +30,15 @@ public class HomePage extends BasePage {
     }
 
     public void logoutApplication() {
-        logoutElement.click();
+        try {
+            Thread.sleep(5000);
+            logoutElement.click();
+        } catch (Exception e) {
+            System.out.println("Exception occurred while clicking logout application: " + e.getMessage());
+        }
     }
 
-    public void clickHomeButton(){
+    public void clickHomeButton() {
         homeIcon.click();
     }
 }
