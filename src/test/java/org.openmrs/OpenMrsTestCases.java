@@ -1,27 +1,13 @@
 package org.openmrs;
 
-import org.openmrs.pageobjects.*;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openmrs.pageobjects.TestProperties;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class OpenMrsTestCases {
+public class OpenMrsTestCases extends OpenMrsBaseTest {
 
     @Test(priority = 0)
     public void registerPatientTest() {
-        System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + "\\DriverFiles\\chromedriver_139v.exe");
-        WebDriver driver = new ChromeDriver();
-        BasePage basePage = new BasePage(driver);
-        LoginPage loginPage = new LoginPage(driver);
-        HomePage homePage = new HomePage(driver);
-        RegistrationPage registrationPage = new RegistrationPage(driver);
-        PatientDetailsPage patientDetailsPage = new PatientDetailsPage(driver);
-
-        basePage.navigateToUrl("https://o2.openmrs.org/openmrs/login.htm");
-        Assert.assertEquals(loginPage.getPageTitle(), "Login", "Login page is not available");
-        loginPage.loginToOpenMrs("Admin", "Admin123", "Registration Desk");
-        Assert.assertEquals(loginPage.getPageTitle(), "Home", "Home Page is not available, Login Failed");
         Assert.assertTrue(homePage.verifyModuleTile("Register a patient"), "Register Patient Module is not displayed");
         homePage.clickModuleTile("Register a patient");
         Assert.assertTrue(homePage.verifyModulePage("Register a patient"), "Register Page is not displayed");
@@ -29,25 +15,11 @@ public class OpenMrsTestCases {
         Assert.assertTrue(registrationPage.verifyEnteredPatientDetails("Test, User1", "Male", "01, January, 1990", "9876543210"), "Registered details showing incorrect");
         registrationPage.clickConfirmButon();
         Assert.assertTrue(patientDetailsPage.verifyPatientName("Test, User1"), "Patient Name is incorrect in Patient Details Page");
-        System.out.println(patientDetailsPage.getPatientId());
-        homePage.logoutApplication();
-        driver.close();
+        TestProperties.setTestProperty("patient.id",patientDetailsPage.getPatientId(),"Updated by Automation Test");
     }
 
     @Test(priority = 1)
     public void findPatientTest() {
-        System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + "\\DriverFiles\\chromedriver_139v.exe");
-        WebDriver driver = new ChromeDriver();
-        BasePage basePage = new BasePage(driver);
-        LoginPage loginPage = new LoginPage(driver);
-        HomePage homePage = new HomePage(driver);
-        FindPatientPage findPatientPage = new FindPatientPage(driver);
-        PatientDetailsPage patientDetailsPage = new PatientDetailsPage(driver);
-
-        basePage.navigateToUrl("https://o2.openmrs.org/openmrs/login.htm");
-        Assert.assertEquals(loginPage.getPageTitle(), "Login", "Login page is not available");
-        loginPage.loginToOpenMrs("Admin", "Admin123", "Registration Desk");
-        Assert.assertEquals(loginPage.getPageTitle(), "Home", "Home Page is not available, Login Failed");
         Assert.assertTrue(homePage.verifyModuleTile("Find Patient Record"), "Find Patient Record Module is not displayed");
         homePage.clickModuleTile("Find Patient Record");
         Assert.assertTrue(homePage.verifyModulePage("Find Patient Record"), "Find Patient Record Page is not displayed");
@@ -55,26 +27,10 @@ public class OpenMrsTestCases {
         Assert.assertTrue(findPatientPage.verifySearchPatientTableColumnValue("Name", "Test User1"), "Find Patient record is not matching");
         findPatientPage.clickSearchPatientTableFirstRecord();
         Assert.assertTrue(patientDetailsPage.verifyPatientName("Test User1"), "Find Patient Name is not matching in Patient Details Page");
-        homePage.logoutApplication();
-        driver.close();
     }
 
     @Test(priority = 2)
     public void activateVisitsAndAddAttachmentsTest() {
-        System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + "\\DriverFiles\\chromedriver_139v.exe");
-        WebDriver driver = new ChromeDriver();
-        BasePage basePage = new BasePage(driver);
-        LoginPage loginPage = new LoginPage(driver);
-        HomePage homePage = new HomePage(driver);
-        FindPatientPage findPatientPage = new FindPatientPage(driver);
-        PatientDetailsPage patientDetailsPage = new PatientDetailsPage(driver);
-        VisitsPage visitsPage = new VisitsPage(driver);
-        AttachmentsPage attachmentsPage = new AttachmentsPage(driver);
-
-        basePage.navigateToUrl("https://o2.openmrs.org/openmrs/login.htm");
-        Assert.assertEquals(loginPage.getPageTitle(), "Login", "Login page is not available");
-        loginPage.loginToOpenMrs("Admin", "Admin123", "Registration Desk");
-        Assert.assertEquals(loginPage.getPageTitle(), "Home", "Home Page is not available, Login Failed");
         Assert.assertTrue(homePage.verifyModuleTile("Find Patient Record"), "Find Patient Record Module is not displayed");
         homePage.clickModuleTile("Find Patient Record");
         Assert.assertTrue(homePage.verifyModulePage("Find Patient Record"), "Find Patient Record Page is not displayed");
@@ -86,27 +42,13 @@ public class OpenMrsTestCases {
         Assert.assertTrue(visitsPage.verifyEndVisitLink(), "Start Visit Page is not displayed");
         visitsPage.clickAttachments();
         Assert.assertTrue(attachmentsPage.verifyAttachmentsPage(), "Attachments Page is not displayed");
-        String filePath = System.getProperty("user.dir") + "\\src\\test\\resources\\UploadFiles\\UploadFile.pdf";
+        String filePath = System.getProperty("user.dir") + TestProperties.getTestProperty("upload.file.path");
         attachmentsPage.addAttachments(filePath, "TestCaption");
         Assert.assertTrue(attachmentsPage.verifyAddAttachments("TestCaption"), "Add Attachment failed");
-        homePage.logoutApplication();
-        driver.close();
     }
 
     @Test(priority = 3)
     public void deletePatientTest() {
-        System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + "\\DriverFiles\\chromedriver_139v.exe");
-        WebDriver driver = new ChromeDriver();
-        BasePage basePage = new BasePage(driver);
-        LoginPage loginPage = new LoginPage(driver);
-        HomePage homePage = new HomePage(driver);
-        FindPatientPage findPatientPage = new FindPatientPage(driver);
-        PatientDetailsPage patientDetailsPage = new PatientDetailsPage(driver);
-
-        basePage.navigateToUrl("https://o2.openmrs.org/openmrs/login.htm");
-        Assert.assertEquals(loginPage.getPageTitle(), "Login", "Login page is not available");
-        loginPage.loginToOpenMrs("Admin", "Admin123", "Registration Desk");
-        Assert.assertEquals(loginPage.getPageTitle(), "Home", "Home Page is not available, Login Failed");
         Assert.assertTrue(homePage.verifyModuleTile("Find Patient Record"), "Find Patient Record Module is not displayed");
         homePage.clickModuleTile("Find Patient Record");
         Assert.assertTrue(homePage.verifyModulePage("Find Patient Record"), "Find Patient Record Page is not displayed");
@@ -117,7 +59,5 @@ public class OpenMrsTestCases {
         patientDetailsPage.deletePatient("Other");
         findPatientPage.searchPatientWithName("Test User1");
         Assert.assertTrue(findPatientPage.verifyNoMatchingRecordsFoundMessage(),"Patient Record not deleted");
-        homePage.logoutApplication();
-        driver.close();
     }
 }
