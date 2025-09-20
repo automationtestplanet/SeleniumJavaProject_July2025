@@ -33,6 +33,10 @@ public class LoginPage extends BasePage {
         driver.findElement(By.id(moduleName)).click();
     }
 
+    public WebElement getLoginButton(){
+        return loginButtonElement;
+    }
+
     public void clickLogin() {
         loginButtonElement.click();
     }
